@@ -17,7 +17,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userId }) => {
   return (
     <div>
       <h2>User Details</h2>
-      <p>Name: {user?.name}</p>
+      <p>Username: {user?.username}</p>
       <p>Email: {user?.email}</p>
     </div>
   );

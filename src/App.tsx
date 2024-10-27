@@ -1,7 +1,10 @@
 /** @format */
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import User from "./pages/users/register/User";
+// import User from "./pages/users/register/User";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import UserProfile from "./components/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +15,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "register",
-        element: <User />,
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "profile",
+        element: <UserProfile />,
       },
     ],
   },

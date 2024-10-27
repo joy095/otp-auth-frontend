@@ -1,21 +1,36 @@
 /** @format */
 
-// src/app/store.ts
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { usersApi } from "../features/users/usersApi"; // Import your API slice
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { baseApi } from "../features/api/baseApi";
+import authReducer from "../features/auth/authSlice";
 
-// Combine the reducers
-const rootReducer = combineReducers({
-  [usersApi.reducerPath]: usersApi.reducer, // Add the usersApi reducer
-});
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["auth"], // Persist only the auth slice
+};
 
-// Configure the store
+const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    [baseApi.reducerPath]: baseApi.reducer,
+    auth: persistedAuthReducer,
+  },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(usersApi.middleware), // Add API middleware
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }).concat(baseApi.middleware),
+  devTools: process.env.NODE_ENV !== "production",
 });
 
-// Types for TypeScript
+export const persistor = persistStore(store);
+setupListeners(store.dispatch);
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

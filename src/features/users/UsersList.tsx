@@ -17,7 +17,7 @@ const UsersList: React.FC = () => {
       <ul>
         {users?.map((user) => (
           <li key={user.id}>
-            {user.name} - {user.email}
+            {user.username} - {user.email}
             <button onClick={() => deleteUser(user.id)}>Delete</button>
           </li>
         ))}
